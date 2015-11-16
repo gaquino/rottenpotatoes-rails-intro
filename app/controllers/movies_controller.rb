@@ -56,7 +56,7 @@ class MoviesController < ApplicationController
     #@movies = Movie.all
     if(!@ratingValue.nil?)
       puts "FILTRO POR RATING"
-      @movies = Movie.order(session[:sort]).where(:rating => session[:ratings].keys)
+      @movies = Movie.order(session[:sort]).where(:rating => @ratingValue.keys)
     else
       puts "FILTRO POR ORDER"
       @movies = Movie.order(session[:sort])
