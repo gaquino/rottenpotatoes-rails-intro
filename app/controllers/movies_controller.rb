@@ -25,11 +25,28 @@ class MoviesController < ApplicationController
         puts "KEY=>" + mykey
       end
     else
-      @ratingValue = {"G"=>"G","PG"=>"PG","PG-13"=>"PG-13","R"=>"R"}
-      
+      if(session[:ratings].present?)
+        @ratingValue =session[:ratings]
+      else
+        @ratingValue = {"G"=>"G","PG"=>"PG","PG-13"=>"PG-13","R"=>"R"}
+      end
     end
     
     @sortdata = params[:sort]
+    
+    #session[:sort] = params[:sort] if params[:sort].present?
+    #session[:ratings] = params[:ratings] if params[:sort].present?
+    
+    #params[:sort].present? ? session[:sort] = params[:sort] : nil
+    #params[:ratings].present? ? session[:ratings] = params[:ratings] : session[:ratings] = @ratingValue unless session[:ratings].present?
+    
+    session[:ratings] = params[:ratings] if params[:ratings].present?
+    session[:sort] = params[:sort] if params[:sort].present?
+    
+    puts "SESSION_SORT" + session[:sort].to_s
+    puts "SESSION_RTING" + session[:ratings].to_s
+    
+    
     if @sortdata == 'title'
       @title_header = 'hilite'
     elsif @sortdata == 'release_date'
@@ -39,10 +56,10 @@ class MoviesController < ApplicationController
     #@movies = Movie.all
     if(!@ratingValue.nil?)
       puts "FILTRO POR RATING"
-      @movies = Movie.order(@sortdata).where(:rating => @ratingValue.keys)
+      @movies = Movie.order(session[:sort]).where(:rating => session[:ratings].keys)
     else
       puts "FILTRO POR ORDER"
-      @movies = Movie.order(@sortdata)
+      @movies = Movie.order(session[:sort])
     end
   
   end
