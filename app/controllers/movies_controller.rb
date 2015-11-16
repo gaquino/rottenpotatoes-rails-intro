@@ -11,6 +11,21 @@ class MoviesController < ApplicationController
   end
 
   def index
+    @all_ratings = ['G','PG','PG-13','R']
+    
+    @ratingValue = params[:ratings]
+    puts  "RATING==>" + @ratingValue.to_s
+    puts "RATINGS" + (!@ratingValue.nil?).to_s
+    
+    
+    
+    if(!@ratingValue.nil?)
+      puts "loop"
+      @ratingValue.keys.each do |mykey|
+        puts "KEY=>" + mykey
+      end
+    end
+    
     @sortdata = params[:sort]
     if @sortdata == 'title'
       @title_header = 'hilite'
@@ -19,7 +34,14 @@ class MoviesController < ApplicationController
     end
     
     #@movies = Movie.all
-    @movies = Movie.order(@sortdata)
+    if(!@ratingValue.nil?)
+      puts "FILTRO POR RATING"
+      @movies = Movie.order(@sortdata).where(:rating => @ratingValue.keys)
+    else
+      puts "FILTRO POR ORDER"
+      @movies = Movie.order(@sortdata)
+    end
+  
   end
 
   def new
