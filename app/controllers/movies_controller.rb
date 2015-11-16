@@ -24,6 +24,9 @@ class MoviesController < ApplicationController
       @ratingValue.keys.each do |mykey|
         puts "KEY=>" + mykey
       end
+    else
+      @ratingValue = {"G"=>"G","PG"=>"PG","PG-13"=>"PG-13","R"=>"R"}
+      
     end
     
     @sortdata = params[:sort]
