@@ -11,6 +11,14 @@ class MoviesController < ApplicationController
   end
 
   def index
+    
+    session_params = session.to_hash.slice('sort','ratings')
+    if params.slice(:sort, :ratings).empty? && session_params.any?
+      flash.keep
+      redirect_to movies_path(session_params)
+    end
+    
+    
     @all_ratings = ['G','PG','PG-13','R']
     
     @ratingValue = params[:ratings]
